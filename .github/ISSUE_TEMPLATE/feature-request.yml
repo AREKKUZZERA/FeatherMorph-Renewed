@@ -10,10 +10,10 @@ body:
   - type: markdown
     attributes:
       value: |
-        For disguising as non-living entities (blocks, display entities etc.), see [here](https://github.com/NiFeather/FeatherMorph/discussions/24).
+        For disguising as non-living entities (blocks, display entities etc.), see [here](https://github.com/AREKKUZZERA/FeatherMorph/discussions/24).
         tldr: It's not supported by our current disguise renderer as it isn't designed for these, currently you can use LibsDisguises as an alternative :)
         ---
-        如果是关于伪装成非生物实体（像是方块、展示实体），请参阅[这里](https://github.com/NiFeather/FeatherMorph/discussions/24)
+        如果是关于伪装成非生物实体（像是方块、展示实体），请参阅[这里](https://github.com/AREKKUZZERA/FeatherMorph/discussions/24)
         长话短说就是：当前的伪装渲染器不支持此类功能，因为它并不是为了这些设计的。当前你可以使用LibsDisguises来实现这些功能 :)
   - type: textarea
     id: description

@@ -53,15 +53,12 @@ public class EquipmentPacketListener extends ProtocolListener
             return;
         }
 
-        //获取此包的来源实体
-        var sourcePlayer = getPlayerFrom(packet.getEntityId());
-        if (sourcePlayer == null)
-            return;
-
-        var watcher = registry.getWatcher(sourcePlayer.getUniqueId());
-
+        var watcher = getWatcherFrom(packet.getEntityId());
         if (watcher == null)
             return;
+
+        //获取此包的来源实体
+        var sourcePlayer = watcher.getBindingPlayer();
 
         if (!watcher.readEntryOrDefault(CustomEntries.DISPLAY_FAKE_EQUIPMENT, false))
         {

@@ -3,18 +3,12 @@ package xyz.nifeather.morph.backends.server.renderer.network.listeners;
 import com.github.retrooper.packetevents.event.PacketSendEvent;
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEntityMetadata;
-import xiamomc.pluginbase.Annotations.Resolved;
-import xyz.nifeather.morph.api.FeatherMorphAPI;
-import xyz.nifeather.morph.backends.server.renderer.network.registries.RenderRegistry;
 
 /**
  * Listener used to override the metadata packet, so that the client won't panic when it received player's meta but the player is disguised as a mob.
  */
 public class MetaPacketListener extends ProtocolListener
 {
-    @Resolved(shouldSolveImmediately = true)
-    private RenderRegistry registry;
-
     @Override
     public String getIdentifier()
     {
@@ -33,19 +27,14 @@ public class MetaPacketListener extends ProtocolListener
 
     private void onMetaPacket(WrapperPlayServerEntityMetadata packet, PacketSendEvent packetEvent)
     {
-        //获取此包的来源实体
-        var sourcePlayer = getPlayerFrom(packet.getEntityId());
-
-        // How could this be?!
-        if (sourcePlayer == null)
-            return;
-
-        if (sourcePlayer.equals(packetEvent.getPlayer())) return;
-
-        var watcher = registry.getWatcher(sourcePlayer.getUniqueId());
-
+        var watcher = getWatcherFrom(packet.getEntityId());
         if (watcher == null)
             return;
+
+        //获取此包的来源实体
+        var sourcePlayer = watcher.getBindingPlayer();
+
+        if (sourcePlayer.equals(packetEvent.getPlayer())) return;
 
         //然后获取此包要发送的目标玩家
         var targetPlayer = packetEvent.getPlayer();

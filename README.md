@@ -1,19 +1,17 @@
-Archived, feel free to fork, although I would suggest making your own, as there aren't many documents about this project :D
+Maintained fork of FeatherMorph by arekkuzzera.
 
 ![cover](./assets/cover.png)
 
 <div align="center">
 
-![Pic](https://cdn.modrinth.com/data/ydNDeiDX/images/9e71cabf14eb3c0ccaef48d7b81410d79dc04261.png)
-
-[Client integration mod](https://modrinth.com/mod/feathermorphclient) | [Documents (WIP)](./docs)
+[Documents (WIP)](./docs)
 
 </div>
 
 ---
-![CI Status](https://github.com/NiFeather/FeatherMorph/actions/workflows/build.yml/badge.svg)
-![Release](https://img.shields.io/github/release/NiFeather/FeatherMorph.svg)
-[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/NiFeather/FeatherMorph)
+![CI Status](https://github.com/AREKKUZZERA/FeatherMorph/actions/workflows/build.yml/badge.svg)
+![Release](https://img.shields.io/github/release/AREKKUZZERA/FeatherMorph.svg)
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/AREKKUZZERA/FeatherMorph)
 
 ### Features
 
@@ -50,9 +48,9 @@ To display disguise server-side, we also need these plugins, depending on which 
 
 ### Download
 
-[![Available on Modrinth](https://raw.githubusercontent.com/intergrav/devins-badges/v3/assets/cozy/available/modrinth_vector.svg)](https://modrinth.com/plugin/feathermorph/changelog) [![Available on GitHub](https://raw.githubusercontent.com/intergrav/devins-badges/v3/assets/cozy/available/github_vector.svg)](https://github.com/NiFeather/FeatherMorph/releases)
+[![Available on GitHub](https://raw.githubusercontent.com/intergrav/devins-badges/v3/assets/cozy/available/github_vector.svg)](https://github.com/AREKKUZZERA/FeatherMorph/releases)
 
-[Modrinth](https://modrinth.com/plugin/feathermorph/changelog) | [GitHub](https://github.com/NiFeather/FeatherMorph/releases)
+[GitHub Releases](https://github.com/AREKKUZZERA/FeatherMorph/releases)
 
 ---
 
@@ -64,7 +62,7 @@ See [Gameplay](./docs/Gameplay.md).
 ### Building
 ```bash
 #!/usr/bin/env bash
-git clone https://github.com/NiFeather/FeatherMorph
+git clone https://github.com/AREKKUZZERA/FeatherMorph
 cd FeatherMorph
 
 ./gradlew build --no-daemon
@@ -72,7 +70,24 @@ cd FeatherMorph
 
 The file located at `build/libs` that ends with `-final` is the file that you should use.
 
+To build for a specific Minecraft target, pass `mc_target`:
+
+```bash
+./gradlew build --no-daemon -Pmc_target=26.1.2
+```
+
+In PowerShell, quote the property to avoid splitting version numbers:
+
+```powershell
+./gradlew build --no-daemon "-Pmc_target=26.1.2"
+```
+
 ### Credits
+- Original FeatherMorph project by MATRIX-feather / NiFeather:
+  [Modrinth project](https://modrinth.com/plugin/feathermorph),
+  [MATRIX-feather on Modrinth](https://modrinth.com/user/MATRIX-feather),
+  [original GitHub repository](https://github.com/NiFeather/FeatherMorph).
+  This fork keeps the original license terms; see [LICENSE](./LICENSE).
 - [LibsDisguises](https://github.com/libraryaddict/LibsDisguises): For making this project possible, and for reference about how to make the server renderer
 - [VeinMiner](https://github.com/2008Choco/VeinMiner): For the reference about how to implement *Client <-> Server* communication.
 - [ProtocolLib](https://github.com/dmulloy2/ProtocolLib): For making server renderer possible in 1.x releases

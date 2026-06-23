@@ -122,7 +122,7 @@ public class UpdateHandler extends MorphPluginObject
                     .GET()
                     .uri(uri)
                     .timeout(Duration.ofSeconds(10))
-                    .header("User-Agent", "feathermorph")
+                    .header("User-Agent", "arekkuzzera-feathermorph")
                     .build();
 
             httpClient = HttpClient.newBuilder()
@@ -255,7 +255,7 @@ public class UpdateHandler extends MorphPluginObject
                     .resolve("origin", latestVersion.toString());
 
             this.msgSecondary = UpdateStrings.update_here()
-                    .resolve("url", "https://modrinth.com/plugin/feathermorph");
+                    .resolve("url", "https://github.com/AREKKUZZERA/FeatherMorph/releases");
 
             this.updateAvailable = true;
 

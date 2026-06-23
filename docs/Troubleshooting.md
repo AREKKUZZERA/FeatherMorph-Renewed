@@ -11,4 +11,4 @@ If so, installing [PacketEvents](https://modrinth.com/plugin/packetevents) and r
 ## Server is using a custom nametag plugin, and the nametag is glitching
 Unfortunately, since FeatherMorph doesn't mess with nametags or any scoreboard features, actions might be required on their side.
 
-See [Discussion about player tag (nametag) plugins](https://github.com/NiFeather/FeatherMorph/discussions/38) for compatibility report.
+See [Discussion about player tag (nametag) plugins](https://github.com/AREKKUZZERA/FeatherMorph/discussions/38) for compatibility report.

@@ -3,6 +3,7 @@ package xyz.nifeather.morph.backends.server.renderer.network.registries;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -55,6 +56,7 @@ public class RenderRegistry extends MorphPluginObject
     //region Registry
 
     private final Map<UUID, SingleWatcher> watcherMap = new ConcurrentHashMap<>();
+    private final Map<Integer, SingleWatcher> entityIdWatcherMap = new ConcurrentHashMap<>();
 
     public List<SingleWatcher> getWatchers()
     {
@@ -74,6 +76,36 @@ public class RenderRegistry extends MorphPluginObject
         return watcherMap.getOrDefault(uuid, null);
     }
 
+    @Nullable
+    public SingleWatcher getWatcherByEntityId(int entityId)
+    {
+        return entityIdWatcherMap.get(entityId);
+    }
+
+    @Nullable
+    public SingleWatcher findActiveWatcherAtSoundPosition(@NotNull World world, int x, int y, int z)
+    {
+        for (var watcher : watcherMap.values())
+        {
+            if (!watcher.isActive())
+                continue;
+
+            var player = watcher.getBindingPlayer();
+            if (!player.getWorld().equals(world))
+                continue;
+
+            var playerLocation = player.getLocation();
+            var locX = (int) (playerLocation.getX() * 8);
+            var locY = (int) (playerLocation.getY() * 8);
+            var locZ = (int) (playerLocation.getZ() * 8);
+
+            if (x == locX && y == locY && z == locZ)
+                return watcher;
+        }
+
+        return null;
+    }
+
     public void unregister(Player player)
     {
         unregister(player.getUniqueId());
@@ -89,6 +121,8 @@ public class RenderRegistry extends MorphPluginObject
     {
         var watcher = watcherMap.remove(uuid);
         if (watcher == null) return null;
+
+        entityIdWatcherMap.remove(watcher.getBindingPlayer().getEntityId(), watcher);
 
         callUnregister(Bukkit.getPlayer(uuid), watcher);
 
@@ -133,7 +167,11 @@ public class RenderRegistry extends MorphPluginObject
         if (!watcher.getBindingPlayer().getUniqueId().equals(uuid))
             throw new IllegalArgumentException("Watcher UUID doesn't match with player's UUID!");
 
-        watcherMap.put(uuid, watcher);
+        var previous = watcherMap.put(uuid, watcher);
+        if (previous != null)
+            entityIdWatcherMap.remove(previous.getBindingPlayer().getEntityId(), previous);
+
+        entityIdWatcherMap.put(watcher.getBindingPlayer().getEntityId(), watcher);
 
         watcher.setParentRegistry(this);
         callRegister(Bukkit.getPlayer(uuid), watcher);
@@ -148,6 +186,7 @@ public class RenderRegistry extends MorphPluginObject
         });
 
         watcherMap.clear();
+        entityIdWatcherMap.clear();
     }
 
     //endregion Registry

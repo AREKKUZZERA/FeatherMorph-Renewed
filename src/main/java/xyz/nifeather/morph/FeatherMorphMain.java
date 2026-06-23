@@ -43,7 +43,6 @@ import xyz.nifeather.morph.storage.skill.SkillsConfigurationStoreNew;
 import xyz.nifeather.morph.updates.UpdateHandler;
 import xyz.nifeather.morph.utilities.FoliaThreadUtils;
 
-import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public final class FeatherMorphMain extends XiaMoJavaPlugin
@@ -191,9 +190,8 @@ public final class FeatherMorphMain extends XiaMoJavaPlugin
         pluginManager = Bukkit.getPluginManager();
         var bukkitVersion = Bukkit.getMinecraftVersion();
 
-        String primaryVersion = "26.1.2";
-        String[] compatVersions = new String[] { primaryVersion, "26.1", "26.1.1" };
-        if (Arrays.stream(compatVersions).noneMatch(bukkitVersion::equals))
+        var primaryVersion = SupportedMinecraftVersions.PRIMARY;
+        if (!SupportedMinecraftVersions.isRuntimeCompatible(bukkitVersion))
         {
             printImportantWarning(
                     true,

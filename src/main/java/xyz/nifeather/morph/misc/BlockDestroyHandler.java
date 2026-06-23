@@ -162,10 +162,33 @@ public class BlockDestroyHandler
 
         if (block != null)
         {
-            this.nmsBlock = ((CraftBlock) block).getBlockState();
+            this.nmsBlock = getNmsBlockState((CraftBlock) block);
             this.nmsWorld = ((CraftWorld) block.getWorld()).getHandle();
         }
 
         setProgress(0, lastUpdate + 2);
+    }
+
+    private BlockState getNmsBlockState(CraftBlock craftBlock)
+    {
+        try
+        {
+            return (BlockState) craftBlock.getClass().getMethod("getBlockState").invoke(craftBlock);
+        }
+        catch (NoSuchMethodException ignored)
+        {
+            try
+            {
+                return (BlockState) craftBlock.getClass().getMethod("getNMS").invoke(craftBlock);
+            }
+            catch (ReflectiveOperationException e)
+            {
+                throw new IllegalStateException("Unable to read NMS block state", e);
+            }
+        }
+        catch (ReflectiveOperationException e)
+        {
+            throw new IllegalStateException("Unable to read NMS block state", e);
+        }
     }
 }

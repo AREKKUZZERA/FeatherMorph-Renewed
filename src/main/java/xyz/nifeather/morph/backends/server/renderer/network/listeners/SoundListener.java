@@ -5,14 +5,11 @@ import com.github.retrooper.packetevents.protocol.packettype.PacketType;
 import com.github.retrooper.packetevents.protocol.sound.StaticSound;
 import com.github.retrooper.packetevents.resources.ResourceLocation;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerSoundEffect;
-import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import xiamomc.pluginbase.Annotations.Resolved;
 import xyz.nifeather.morph.backends.server.renderer.network.registries.RenderRegistry;
 import xyz.nifeather.morph.utilities.EntityTypeUtils;
-
-import java.util.Objects;
 
 public class SoundListener extends ProtocolListener
 {
@@ -38,26 +35,14 @@ public class SoundListener extends ProtocolListener
 
         var wrapper = new WrapperPlayServerSoundEffect(event);
         var effectPosition = wrapper.getEffectPosition();
-        var positionAsLocation = new Location(targetPlayer.getWorld(), effectPosition.x, effectPosition.y, effectPosition.z);
 
         // Not accurate, but it's the only way we can find the hurt player
         // Because PacketType.Play.Server.ENTITY_SOUND_EFFECT is not triggered when someone hurt.
-        var matchingWatcher = registry.getWatchers().stream().filter(w ->
-        {
-            if (!w.isActive())
-                return false;
-
-            var playerLocation = w.getBindingPlayer().getLocation();
-
-            if (!Objects.equals(playerLocation.getWorld(), positionAsLocation.getWorld()))
-                return false;
-
-            var locX = (int) (playerLocation.x() * 8);
-            var locY = (int) (playerLocation.y() * 8);
-            var locZ = (int) (playerLocation.z() * 8);
-
-            return effectPosition.x == locX && effectPosition.y == locY && effectPosition.z == locZ;
-        }).findFirst().orElse(null);
+        var matchingWatcher = registry.findActiveWatcherAtSoundPosition(
+                targetPlayer.getWorld(),
+                effectPosition.x,
+                effectPosition.y,
+                effectPosition.z);
 
         if (matchingWatcher == null || matchingWatcher.getEntityType() == EntityType.PLAYER)
             return;

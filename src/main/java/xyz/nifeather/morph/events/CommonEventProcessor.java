@@ -365,6 +365,16 @@ public class CommonEventProcessor extends MorphPluginObject implements Listener
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent e)
     {
+        var from = e.getFrom();
+        var to = e.getTo();
+        if (to == null)
+            return;
+
+        if (from.getX() == to.getX()
+                && from.getY() == to.getY()
+                && from.getZ() == to.getZ())
+            return;
+
         var state = morphs.getDisguiseStateFor(e.getPlayer());
         if (state == null)
             return;

@@ -43,6 +43,7 @@ import xyz.nifeather.morph.network.server.MorphClientHandler;
 import xyz.nifeather.morph.utilities.DisguiseUtils;
 import xyz.nifeather.morph.utilities.ItemUtils;
 
+import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.Objects;
 
@@ -447,11 +448,88 @@ public class PlayerOperationHandle extends MorphPluginObject implements IOperati
             var hitPositionAsNMSVec3 = new Vec3(hitPos.getX(), hitPos.getY(), hitPos.getZ());
 
             assert entityHandle != null;
-            return entityHandle.interact(playerHandle, hand, hitPositionAsNMSVec3).consumesAction()
-                    || playerHandle.interactOn(entityHandle, hand, hitPositionAsNMSVec3).consumesAction()
+            return interactEntity(entityHandle, playerHandle, hand, hitPositionAsNMSVec3)
+                    || interactOnEntity(playerHandle, entityHandle, hand, hitPositionAsNMSVec3)
                     || manager.useItem(playerHandle, worldHandle, CraftItemStack.asNMSCopy(bukkitItem), hand).consumesAction();
         }
 
         return false;
+    }
+
+    private boolean interactEntity(net.minecraft.world.entity.Entity entity,
+                                   net.minecraft.server.level.ServerPlayer player,
+                                   InteractionHand hand,
+                                   Vec3 hitPos)
+    {
+        var result = invokeCompatible(entity,
+                "interact",
+                new Class<?>[] { net.minecraft.world.entity.player.Player.class, InteractionHand.class, Vec3.class },
+                new Object[] { player, hand, hitPos },
+                new Class<?>[] { net.minecraft.world.entity.player.Player.class, InteractionHand.class },
+                new Object[] { player, hand });
+
+        return consumesAction(result);
+    }
+
+    private boolean interactOnEntity(net.minecraft.server.level.ServerPlayer player,
+                                     net.minecraft.world.entity.Entity entity,
+                                     InteractionHand hand,
+                                     Vec3 hitPos)
+    {
+        var result = invokeCompatible(player,
+                "interactOn",
+                new Class<?>[] { net.minecraft.world.entity.Entity.class, InteractionHand.class, Vec3.class },
+                new Object[] { entity, hand, hitPos },
+                new Class<?>[] { net.minecraft.world.entity.Entity.class, InteractionHand.class },
+                new Object[] { entity, hand });
+
+        return consumesAction(result);
+    }
+
+    private Object invokeCompatible(Object target,
+                                    String methodName,
+                                    Class<?>[] primaryParameterTypes,
+                                    Object[] primaryArguments,
+                                    Class<?>[] fallbackParameterTypes,
+                                    Object[] fallbackArguments)
+    {
+        try
+        {
+            Method method = target.getClass().getMethod(methodName, primaryParameterTypes);
+            return method.invoke(target, primaryArguments);
+        }
+        catch (NoSuchMethodException ignored)
+        {
+            try
+            {
+                Method method = target.getClass().getMethod(methodName, fallbackParameterTypes);
+                return method.invoke(target, fallbackArguments);
+            }
+            catch (ReflectiveOperationException e)
+            {
+                logger.warn("Failed to call fallback NMS method {}", methodName, e);
+                return null;
+            }
+        }
+        catch (ReflectiveOperationException e)
+        {
+            logger.warn("Failed to call NMS method {}", methodName, e);
+            return null;
+        }
+    }
+
+    private boolean consumesAction(Object interactionResult)
+    {
+        if (interactionResult == null) return false;
+
+        try
+        {
+            return (boolean) interactionResult.getClass().getMethod("consumesAction").invoke(interactionResult);
+        }
+        catch (ReflectiveOperationException e)
+        {
+            logger.warn("Failed to read NMS interaction result", e);
+            return false;
+        }
     }
 }

@@ -33,6 +33,12 @@ public abstract class ProtocolListener extends MorphPluginObject implements Pack
     @Resolved(shouldSolveImmediately = true)
     private RenderRegistry registry;
 
+    @Nullable
+    protected SingleWatcher getWatcherFrom(int entityId)
+    {
+        return registry.getWatcherByEntityId(entityId);
+    }
+
     protected void handleException(@Nullable Player sourcePlayer, SingleWatcher watcher, Throwable t)
     {
         boolean handled = false;
