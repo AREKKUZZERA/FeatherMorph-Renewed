@@ -8,17 +8,6 @@ import net.minecrell.pluginyml.paper.PaperPluginDescription
  */
 
 val supportedMinecraftTargets = listOf(
-    "1.21",
-    "1.21.1",
-    "1.21.2",
-    "1.21.3",
-    "1.21.4",
-    "1.21.5",
-    "1.21.6",
-    "1.21.7",
-    "1.21.8",
-    "1.21.9",
-    "1.21.10",
     "1.21.11",
     "26.1",
     "26.1.1",
@@ -26,9 +15,9 @@ val supportedMinecraftTargets = listOf(
 )
 
 val paperDevBundleVersions = mapOf(
-    "26.1" to "26.1.2.build.5-alpha",
-    "26.1.1" to "26.1.2.build.5-alpha",
-    "26.1.2" to "26.1.2.build.5-alpha"
+    "26.1" to "26.1.1.build.29-alpha",
+    "26.1.1" to "26.1.1.build.29-alpha",
+    "26.1.2" to "26.1.2.build.72-stable"
 )
 
 val mcTarget = providers.gradleProperty("mc_target")
@@ -206,7 +195,7 @@ paper {
     load = BukkitPluginDescription.PluginLoadOrder.POSTWORLD
     main = "xyz.nifeather.morph.FeatherMorphMain"
     bootstrapper = "xyz.nifeather.morph.FeatherMorphBootstrap"
-    apiVersion = "1.21"
+    apiVersion = mcTarget
     authors = listOf("arekkuzzera")
 
     serverDependencies {
@@ -399,6 +388,14 @@ tasks.shadowJar {
 tasks.withType<Jar> {
     exclude("plugin.yml")
     from("LICENSE")
+
+    manifest {
+        attributes(
+            "Minecraft-Target" to mcTarget,
+            "Minecraft-Api-Version" to mcTarget,
+            "Minecraft-Dev-Bundle" to resolvedMinecraftVersion
+        )
+    }
 }
 
 tasks.withType<JavaCompile>() {

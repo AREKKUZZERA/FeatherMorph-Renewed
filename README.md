@@ -76,6 +76,8 @@ To build for a specific Minecraft target, pass `mc_target`:
 ./gradlew build --no-daemon -Pmc_target=26.1.2
 ```
 
+Supported build targets are `1.21.11`, `26.1`, `26.1.1`, and `26.1.2`.
+
 In PowerShell, quote the property to avoid splitting version numbers:
 
 ```powershell
