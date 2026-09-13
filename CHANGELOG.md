@@ -1,5 +1,14 @@
 # Changelog
 
+## 2.9.2
+
+### Added
+- Added a release jar targeting Minecraft 26.2.
+
+### Changed
+- Updated the default Minecraft target to 26.2.
+- Added Paper dev bundle `26.2.build.123-stable` for 26.2 builds.
+
 ## 2.9.1
 
 ### Fixed

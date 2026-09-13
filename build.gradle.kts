@@ -11,18 +11,20 @@ val supportedMinecraftTargets = listOf(
     "1.21.11",
     "26.1",
     "26.1.1",
-    "26.1.2"
+    "26.1.2",
+    "26.2"
 )
 
 val paperDevBundleVersions = mapOf(
     "26.1" to "26.1.1.build.29-alpha",
     "26.1.1" to "26.1.1.build.29-alpha",
-    "26.1.2" to "26.1.2.build.72-stable"
+    "26.1.2" to "26.1.2.build.72-stable",
+    "26.2" to "26.2.build.123-stable"
 )
 
 val mcTarget = providers.gradleProperty("mc_target")
     .orElse(providers.gradleProperty("mc_version"))
-    .getOrElse("26.1.2")
+    .getOrElse("26.2")
 
 require(mcTarget in supportedMinecraftTargets) {
     "Unsupported mc_target '$mcTarget'. Valid targets: ${supportedMinecraftTargets.joinToString()}"
