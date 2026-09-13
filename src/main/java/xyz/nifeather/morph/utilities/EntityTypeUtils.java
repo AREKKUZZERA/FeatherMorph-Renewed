@@ -4,6 +4,8 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectSet;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
@@ -82,7 +84,7 @@ public class EntityTypeUtils
 
         if (bukkitType == EntityType.UNKNOWN) return null;
 
-        var result = net.minecraft.world.entity.EntityType.byString(bukkitType.key().asString())
+        var result = BuiltInRegistries.ENTITY_TYPE.getOptional(Identifier.parse(bukkitType.key().asString()))
                 .orElse(null);
 
         nmsTypeMap.put(bukkitType, result);
@@ -96,7 +98,7 @@ public class EntityTypeUtils
         var cache = nmsClassMap.getOrDefault(type, null);
         if (cache != null) return cache;
 
-        var nmsType = net.minecraft.world.entity.EntityType.byString(type.key().asString())
+        var nmsType = BuiltInRegistries.ENTITY_TYPE.getOptional(Identifier.parse(type.key().asString()))
                 .orElse(null);
 
         if (nmsType == null)

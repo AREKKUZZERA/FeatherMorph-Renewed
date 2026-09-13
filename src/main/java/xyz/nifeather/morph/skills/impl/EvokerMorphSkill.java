@@ -21,11 +21,11 @@ import xyz.nifeather.morph.messages.MessageUtils;
 import xyz.nifeather.morph.messages.strings.SkillStrings;
 import xyz.nifeather.morph.misc.DisguiseState;
 import xyz.nifeather.morph.misc.ExecutionErrorException;
-import xyz.nifeather.morph.misc.NmsRecord;
 import xyz.nifeather.morph.misc.mobs.MorphBukkitVexHolder;
 import xyz.nifeather.morph.skills.options.NoOpConfiguration;
 
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class EvokerMorphSkill extends DelayedMorphSkill<NoOpConfiguration>
 {
@@ -208,7 +208,7 @@ public class EvokerMorphSkill extends DelayedMorphSkill<NoOpConfiguration>
                 var vex = world.spawn(location, Vex.class, CreatureSpawnEvent.SpawnReason.CUSTOM);
                 vexCounter.addHolder(new MorphBukkitVexHolder(vex, player));
 
-                vex.setLimitedLifetimeTicks(20 * (30 + NmsRecord.ofPlayer(player).random.nextInt(90)));
+                vex.setLimitedLifetimeTicks(20 * (30 + ThreadLocalRandom.current().nextInt(90)));
 
                 if (isLiving)
                     vex.setTarget((LivingEntity) targetEntity);

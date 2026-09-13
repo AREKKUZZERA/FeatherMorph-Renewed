@@ -106,6 +106,6 @@ public abstract class BasicEntityHandle<M extends Mob> extends MorphPluginObject
 
     protected GoalSelector goalSelector(M mob)
     {
-        return ((CraftMob)mob).getHandle().goalSelector;
+        return ReflectionUtils.getValue(((CraftMob) mob).getHandle(), "goalSelector", GoalSelector.class);
     }
 }

@@ -291,7 +291,7 @@ public class SkinCacheSubCommand extends MorphPluginObject implements IConvertib
                 SkinCacheStrings.infoSkinLine().resolve(
                         "url",
                         Component.text(texDesc)
-                                .clickEvent(ClickEvent.clickEvent(ClickEvent.Action.OPEN_URL, texDesc))
+                                .clickEvent(ClickEvent.openUrl(texDesc))
                                 .decorate(TextDecoration.UNDERLINED)
                 )
         );
