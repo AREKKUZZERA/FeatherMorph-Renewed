@@ -37,7 +37,7 @@ FeatherMorph requires these things to work:
 To display disguise server-side, we also need these plugins, depending on which plugin version you're on.
 
 #### 2.x
-- [PacketEvents 2.8.0](https://modrinth.com/plugin/packetevents)
+- [PacketEvents 2.13.0](https://modrinth.com/plugin/packetevents)
 
 #### 1.x
 - [ProtocolLib](https://ci.dmulloy2.net/job/ProtocolLib)
